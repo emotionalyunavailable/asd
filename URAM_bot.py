@@ -2,6 +2,18 @@ import telebot
 from telebot import types
 bot = telebot.TeleBot('5019193840:AAEieVMgHMGItL2hmtbKHleqfcQJQdrwWNg')
 
+@bot.message_handler(commands=['nummer'])
+def phone(message):
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_phone = types.KeyboardButton(text='Send phone', request_contact=True)
+    keyboard.add(button_phone)
+    bot.send_message(message.chat.id, 'Nummer', reply_markup=keyboard)
+
+
+@bot.message_handler(content_types=['contact'])
+def contact(message):
+    if message.contact is not None:
+        print(message.contact)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -31,7 +43,7 @@ def answer(call):
     if call.data == 'yes':
         markup_reply = types.ReplyKeyboardMarkup(resize_keyboard = True)
         item_id = types.KeyboardButton('ID')
-        item_username = types.KeyboardButton('НИКНЕЙМ')
+        item_username = types.KeyboardButton('Никнейм')
 
         markup_reply.add(item_id, item_username)
         bot.send_message(call.message.chat.id, 'нажмите на одну из кнопок',
@@ -42,5 +54,7 @@ def answer(call):
         pass
 
 
+
+print('bot started')
 bot.polling(none_stop=True, interval=0)
 
