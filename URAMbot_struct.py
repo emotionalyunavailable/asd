@@ -18,55 +18,44 @@ def phone(m, res = False):
     if m.chat.type == 'private':
         if m.text == 'История поездок':
 
-            keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+            markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
             button_phone = types.KeyboardButton(text='Узнать историю поездки', request_contact=True)
-            keyboard.add(button_phone)
-            bot.send_message(m.chat.id, 'Поделитесь контактом чтоб посмотреть свою историю поездки', reply_markup=keyboard)
+            markup.add(button_phone)
+            bot.send_message(m.chat.id, 'Поделитесь контактом чтоб посмотреть свою историю поездки', reply_markup=markup)
         elif m.text == 'Ближайший самокат':
             pass
         elif m.text == 'Информация':
             pass
         elif m.text == 'Назад':
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
             item1 = types.KeyboardButton('История поездок')
             item2 = types.KeyboardButton('Ближайший самокат')
             item3 = types.KeyboardButton('Информация')
             markup.add(item1, item2, item3)
-            bot.send_message(m.chat.id, '', reply_markup= markup)
+            bot.send_message(m.chat.id, 'Назад', reply_markup = markup)
 
 
+#модуль ближайший самокат
+@bot.message_handler(content_types='')
+def nearest_scoot():
+    url = 'https://uram.ddns.net/uram_bot/find'
 
+    req = {'lat': '12', 'lon': '12'}
+    data = '56.9993738'
+    data2 = '54.953738'
+    data3 = '+79195527202'
+    req['lat'] = data
+    req['lon'] = data2
+    req['phone'] = data3
+    req_j = requests.post(url, json=req)
+    req_data = req_j.json()
+    print(req_j.url)
+    print(req_j.status_code)
+    da = req_j.text
+    print(da)
+    print(req_data)
 
-@bot.message_handler(content_types=['text'])
-def get_user_info(message):
-    if message.text == "тест":
-        markup_infine = types.InlineKeyboardMarkup()
-        item_yes = types.InlineKeyboardButton(text = 'ДА', callback_data= 'yes')
-        item_no = types.InlineKeyboardButton(text = 'НЕТ', callback_data= 'no')
-
-        markup_infine.add(item_yes, item_no)
-        bot.send_message(message.chat.id, 'тест кнопок',
-        reply_markup = markup_infine)
-@bot.callback_query_handler(func= lambda call: True)
-def answer(call):
-        if call.data == 'yes':
-            markup_reply = types.ReplyKeyboardMarkup(resize_keyboard = True)
-            item_id = types.KeyboardButton('ID')
-            item_username = types.KeyboardButton('Никнейм')
-
-            markup_reply.add(item_id, item_username)
-            bot.send_message(call.message.chat.id, 'нажмите на одну из кнопок',
-            reply_markup = markup_reply
-)
-
-        elif call.data == 'no':
-            pass
-
-
-
-
-
-
+t = nearest_scoot()
 
 
 
@@ -74,9 +63,6 @@ def answer(call):
 
 
 #Модуль история поездок
-
-
-
 @bot.message_handler(content_types=['contact'])
 def contact(message):
     if message.contact is not None:
