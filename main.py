@@ -15,9 +15,9 @@ def phone(messages):
 def contact(messages):
     if messages.contact is not None:
         print(messages.contact)
-        gol = '+' + messages.contact.phone_number
-        global lose
-        lose = gol
+        lone = '+' + messages.contact.phone_number
+        global set
+        set = lone
 
 @bot.message_handler(commands=["geo"])
 def geo(messages):
@@ -38,7 +38,7 @@ def location(messages):
             data2 = messages.location.longitude
             req['lat'] = data
             req['lon'] = data2
-            req['phone'] = lose
+            req['phone'] = set
             req_j = requests.post(url, json=req)
             req_data = req_j.json()
             da = req_j.text
