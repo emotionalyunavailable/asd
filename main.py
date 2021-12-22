@@ -51,7 +51,7 @@ def location(messages):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(messages):
-    if messages.text == 'Нефтекамск':
+    if messages.text == 'Привет':
         bot.send_message(messages.from_user.id, 'Привет.')
     elif messages.text == '/help':
         bot.send_message(messages.from_user.id, 'Тебе нужно ввести команду /nummer, чтобы мы получили твой номер телефона, так же напиши /geo и отправь свое местоположение.')
